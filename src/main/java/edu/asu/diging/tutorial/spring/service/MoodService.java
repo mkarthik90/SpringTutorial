@@ -25,7 +25,7 @@ public class MoodService implements IMoodService{
 		moodList.add("angry");
 		reasonMap.put("happy", "Got a Mice!!");
 		reasonMap.put("sad", "No MICE :( ");
-		reasonMap.put("angry", "Mice is playing with me ");
+		reasonMap.put("angry", "Mouse are playing with me ");
 	}
 
 	@Override
