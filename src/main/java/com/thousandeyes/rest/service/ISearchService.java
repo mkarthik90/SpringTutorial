@@ -15,4 +15,7 @@ public interface ISearchService {
 	public List<User> fetchListOfUserFollowedBy(String user);
 	
 	public List<User> fetchTweets(String user);
+	
+	public List<User> fetchTweetsBySearch(String user,String search);
+	
 }

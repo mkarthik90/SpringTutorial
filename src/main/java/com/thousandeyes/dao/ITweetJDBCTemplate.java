@@ -11,4 +11,5 @@ public interface ITweetJDBCTemplate {
 	public List<User> listOfFollowersForUser(String user);
 	public List<User> fetchListOfUserFollowedBy(String user);
 	public List<User> fetchTweets(String user);
+	public List<User> fetchTweetsSearch(String user,String search);
 }

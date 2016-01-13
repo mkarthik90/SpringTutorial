@@ -104,8 +104,76 @@ public class SearchController {
 	public ResponseEntity<String> fetchTweets(@RequestParam("user") String user) {
 		
 		List<User> userList = searchService.fetchTweets(user);
+		StringBuilder jsonString = new StringBuilder("{");
+		if (userList.isEmpty()) {
+			jsonString.append("\"message\": \"Does not have any tweet message\"");
+			jsonString.append("}");
+			return new ResponseEntity<String>(jsonString.toString(), HttpStatus.OK);
+		}
+		jsonString.append("\"Tweet Message\":[");
+		int followerNumber = 1;
+		for (Iterator iterator = userList.iterator(); iterator.hasNext();) {
+			User userObject = (User) iterator.next();
+			if (followerNumber != 1) {
+				jsonString.append(",");
+			}
+			jsonString.append("{");
+			jsonString.append("\"Messages\":");
+			jsonString.append("\"");
+			jsonString.append(userObject.getTweetMessage());
+			jsonString.append("\"");
+			
+			jsonString.append(",");
+			jsonString.append("\"Tweeted By\":");
+			jsonString.append("\"");
+			jsonString.append(userObject.getTweetdBy());
+			jsonString.append("\"");
+			
+			jsonString.append("}");
+			followerNumber++;
+		}
+		jsonString.append("]");
+		jsonString.append("}");
+
+		return new ResponseEntity<String>(jsonString.toString(), HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "rest/fetchTweetsWithSearch", method = RequestMethod.GET)
+	public ResponseEntity<String> fetchTweetsWithSearchValue(@RequestParam("user") String user,@RequestParam("search")String search) {
 		
-		return null;
+		List<User> userList = searchService.fetchTweetsBySearch(user,search);
+		StringBuilder jsonString = new StringBuilder("{");
+		if (userList.isEmpty()) {
+			jsonString.append("\"message\": \"Does not have any tweet message\"");
+			jsonString.append("}");
+			return new ResponseEntity<String>(jsonString.toString(), HttpStatus.OK);
+		}
+		jsonString.append("\"Tweet Message\":[");
+		int followerNumber = 1;
+		for (Iterator iterator = userList.iterator(); iterator.hasNext();) {
+			User userObject = (User) iterator.next();
+			if (followerNumber != 1) {
+				jsonString.append(",");
+			}
+			jsonString.append("{");
+			jsonString.append("\"Messages\":");
+			jsonString.append("\"");
+			jsonString.append(userObject.getTweetMessage());
+			jsonString.append("\"");
+			
+			jsonString.append(",");
+			jsonString.append("\"Tweeted By\":");
+			jsonString.append("\"");
+			jsonString.append(userObject.getTweetdBy());
+			jsonString.append("\"");
+			
+			jsonString.append("}");
+			followerNumber++;
+		}
+		jsonString.append("]");
+		jsonString.append("}");
+
+		return new ResponseEntity<String>(jsonString.toString(), HttpStatus.OK);
 	}
 	
 	

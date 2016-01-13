@@ -36,4 +36,9 @@ public class SearchService implements ISearchService {
 	public List<User> fetchTweets(String user) {
 		return tweetjdbcTemplate.fetchTweets(user);
 	}
+
+	@Override
+	public List<User> fetchTweetsBySearch(String user, String search) {
+		return tweetjdbcTemplate.fetchTweetsSearch(user,search);
+	}
 }

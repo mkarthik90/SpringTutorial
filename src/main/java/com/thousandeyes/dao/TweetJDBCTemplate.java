@@ -10,6 +10,7 @@ import java.util.Map;
 import javax.sql.DataSource;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import com.thousandeyes.bean.User;
 
@@ -17,6 +18,7 @@ public class TweetJDBCTemplate implements ITweetJDBCTemplate {
 
 	private DataSource dataSource;
 	private JdbcTemplate jdbcTemplateObject;
+	private NamedParameterJdbcTemplate namedJdbcTemplate;
 
 	public void followUser(String user, String follower) {
 		String sql = "INSERT INTO FOLLOWTABLE (USER,FOLLOWS) VALUES (?,?)";
@@ -46,7 +48,7 @@ public class TweetJDBCTemplate implements ITweetJDBCTemplate {
 		}
 		return userList;
 	}
-	
+
 	@Override
 	public List<User> fetchListOfUserFollowedBy(String user) {
 		String sql = "SELECT * FROM FOLLOWTABLE WHERE USER=?";
@@ -63,42 +65,62 @@ public class TweetJDBCTemplate implements ITweetJDBCTemplate {
 		return userList;
 	}
 
-	
 	@Override
 	public List<User> fetchTweets(String user) {
-		//Can also be done through Joining the table.
+		// Can also be done through Joining the table.
 		List<User> usersList = fetchListOfUserFollowedBy(user);
-		/*Set<String> userSet = new HashSet<String>();
-		userSet.add(user);
-		for (Iterator iterator = usersList.iterator(); iterator.hasNext();) {
-			User userObject = (User) iterator.next();
-			userSet.add(userObject.getUser());
-		}*/
-		
 		List userList = new ArrayList();
+		List<User> tweetList = new ArrayList<User>();
 		userList.add(user);
 		for (Iterator iterator = usersList.iterator(); iterator.hasNext();) {
 			User userObject = (User) iterator.next();
 			userList.add(userObject.getFollows());
 		}
-		
+
 		String sql = "SELECT * FROM TWEETS WHERE TWEETEDBY IN (:userIds)";
-		
-		/*MapSqlParameterSource parameters = new MapSqlParameterSource();
-		parameters.addValue("userIds", userSet);*/
-		try{
-			
-			
-			Map<String, Object> params = new HashMap<String, Object>();
-			params.put("userIds", userList);
-		List messages = jdbcTemplateObject.queryForList(sql, Collections.singletonMap("userIds", params));
-		}
-		catch(Exception ex){
-			ex.printStackTrace();
-		}
-		return null;
+
+		Map params = Collections.singletonMap("userIds", userList);
+		List<Map<String, Object>> messages = namedJdbcTemplate.queryForList(sql, params);
+		formTweetDetails(tweetList, messages);
+
+		return tweetList;
 	}
-	
+
+	@Override
+	public List<User> fetchTweetsSearch(String user, String search) {
+
+		// Can also be done through Joining the table.
+		List<User> usersList = fetchListOfUserFollowedBy(user);
+		List userList = new ArrayList();
+		List<User> tweetList = new ArrayList<User>();
+		userList.add(user);
+		for (Iterator iterator = usersList.iterator(); iterator.hasNext();) {
+			User userObject = (User) iterator.next();
+			userList.add(userObject.getFollows());
+		}
+
+		String sql = "SELECT * FROM TWEETS WHERE MESSAGE LIKE :search AND TWEETEDBY IN (:userIds)";
+
+		Map params = new HashMap();
+		params.put("userIds", userList);
+		params.put("search", "%" + search + "%");
+		List<Map<String, Object>> messages = namedJdbcTemplate.queryForList(sql, params);
+
+		formTweetDetails(tweetList, messages);
+		return tweetList;
+
+	}
+
+	private void formTweetDetails(List<User> tweetList, List<Map<String, Object>> messages) {
+		for (Iterator iterator = messages.iterator(); iterator.hasNext();) {
+			Map<String, String> map = (Map<String, String>) iterator.next();
+			User tweetDetails = new User();
+			tweetDetails.setTweetMessage(map.get("MESSAGE"));
+			tweetDetails.setTweetdBy(map.get("TWEETEDBY"));
+			tweetList.add(tweetDetails);
+		}
+	}
+
 	public DataSource getDataSource() {
 		return dataSource;
 	}
@@ -106,8 +128,7 @@ public class TweetJDBCTemplate implements ITweetJDBCTemplate {
 	public void setDataSource(DataSource dataSource) {
 		this.dataSource = dataSource;
 		this.jdbcTemplateObject = new JdbcTemplate(dataSource);
+		this.namedJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
 	}
-
-
 
 }

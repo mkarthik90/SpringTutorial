@@ -4,7 +4,24 @@ public class User {
 
 	private String user;
 	private String follows;
-	private String tweet;
+	private String tweetMessage;
+	private String tweetdBy;
+
+	public String getTweetMessage() {
+		return tweetMessage;
+	}
+
+	public void setTweetMessage(String tweetMessage) {
+		this.tweetMessage = tweetMessage;
+	}
+
+	public String getTweetdBy() {
+		return tweetdBy;
+	}
+
+	public void setTweetdBy(String tweetdBy) {
+		this.tweetdBy = tweetdBy;
+	}
 
 	public String getUser() {
 		return user;
@@ -22,11 +39,4 @@ public class User {
 		this.follows = follows;
 	}
 
-	public String getTweet() {
-		return tweet;
-	}
-
-	public void setTweet(String tweet) {
-		this.tweet = tweet;
-	}
 }
