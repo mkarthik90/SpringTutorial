@@ -28,7 +28,6 @@ public class MoodService implements IMoodService{
 		reasonMap.put("angry", "Mouse are playing with me ");
 	}
 
-	@Override
 	public Mood getCurrentMood() {
 		Random randomGenerator = new Random();
 		int choosingMood = randomGenerator.nextInt(3);
@@ -36,7 +35,6 @@ public class MoodService implements IMoodService{
 		return mood;
 	}
 	
-	@Override
 	public Mood getReason(String currentMood) {
 		Mood mood = new Mood(currentMood);
 		mood.setReason(reasonMap.get(currentMood));

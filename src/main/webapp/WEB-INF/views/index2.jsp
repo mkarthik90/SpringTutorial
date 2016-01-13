@@ -5,7 +5,7 @@
 
 I am feeling: ${ mood.feeling }.
 
-<a href="/one/reason?currentMood=${ mood.feeling }">Want to know why Tomcat is feeling so !!</a>
+<a href="/ThousandEyes/reason?currentMood=${ mood.feeling }">Want to know why Tomcat is feeling so !!</a>
 
 </body>
 </html>
