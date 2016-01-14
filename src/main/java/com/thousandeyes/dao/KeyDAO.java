@@ -1,5 +1,7 @@
 package com.thousandeyes.dao;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -16,9 +18,9 @@ public class KeyDAO implements IKeyDAO {
 	}
 
 	@Override
-	public Integer checkUserExists(String user) {
+	public List checkUserExists(String user) {
 		String sql = "SELECT USERNAME FROM USERDETAILS WHERE USERNAME =?";
-		int size = thousandeyesTemplate.getJdbcTemplateObject().queryForInt(sql);
+		List size = thousandeyesTemplate.getJdbcTemplateObject().queryForList(sql,user);
 		return size;
 	}
 

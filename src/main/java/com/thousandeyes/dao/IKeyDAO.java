@@ -1,8 +1,10 @@
 package com.thousandeyes.dao;
 
+import java.util.List;
+
 public interface IKeyDAO {
 
 	public void insertApiKey(String user,String apiKey);
 	
-	public Integer checkUserExists(String user);
+	public List checkUserExists(String user);
 }

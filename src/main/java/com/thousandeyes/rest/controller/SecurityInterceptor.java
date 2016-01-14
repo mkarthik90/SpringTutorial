@@ -25,6 +25,10 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
 			throws Exception {
 
 		String apiKey = request.getParameter("api_key");
+		
+		if(request.getRequestURL().toString().contains("/restKey/generateApiKey")){
+			return true;
+		}
 		if(apiKey==null){
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			return false;

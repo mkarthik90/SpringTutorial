@@ -1,5 +1,7 @@
 package com.thousandeyes.rest.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +21,8 @@ public class KeyService implements IKeyService {
 
 	@Override
 	public boolean checkUserExists(String user) {
-		if(keyDAO.checkUserExists(user) > 0){
+		List userList = keyDAO.checkUserExists(user);
+		if(userList!=null | userList.isEmpty()){
 			return true;
 		}
 		return false;

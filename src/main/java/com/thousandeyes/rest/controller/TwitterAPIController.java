@@ -1,8 +1,13 @@
 package com.thousandeyes.rest.controller;
 
 import java.security.Principal;
+import java.security.SecureRandom;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+
+import javax.xml.bind.DatatypeConverter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,13 +18,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.thousandeyes.bean.User;
+import com.thousandeyes.rest.service.IKeyService;
 import com.thousandeyes.rest.service.ISearchService;
 
-@Controller("searchController")
-public class SearchController {
+@Controller("twitterAPIController")
+public class TwitterAPIController {
 
 	@Autowired
 	private ISearchService searchService;
+
+	@Autowired
+	private IKeyService keyService;
 
 	@RequestMapping(value = "rest/followUser", method = RequestMethod.GET)
 	public ResponseEntity<String> followUser(@RequestParam("user") String user, @RequestParam("follows") String follows,
@@ -177,4 +186,35 @@ public class SearchController {
 		return new ResponseEntity<String>(jsonString.toString(), HttpStatus.OK);
 	}
 
+	@RequestMapping(value = "restKey/generateApiKey", method = RequestMethod.GET)
+	public ResponseEntity<String> generateApiKey(@RequestParam("user") String userName) {
+
+		if (!keyService.checkUserExists(userName)) {
+			StringBuilder builder = new StringBuilder("{");
+			builder.append("\"ERROR MESSAGE\":");
+			builder.append("\"");
+			builder.append("USER DOESNOT EXISTS");
+			builder.append("\"");
+			builder.append("}");
+
+			return new ResponseEntity<String>(builder.toString(), HttpStatus.OK);
+		}
+
+		SecureRandom random = new SecureRandom();
+		byte bytes[] = new byte[10];
+		random.nextBytes(bytes);
+		random.nextBytes(bytes);
+
+		String apiKey = DatatypeConverter.printBase64Binary(bytes);
+		keyService.insertAPIKey(userName, apiKey);
+
+		StringBuilder builder = new StringBuilder("{");
+		builder.append("\"apiKey\":");
+		builder.append("\"");
+		builder.append(apiKey.toString());
+		builder.append("\"");
+		builder.append("}");
+
+		return new ResponseEntity<String>(builder.toString(), HttpStatus.OK);
+	}
 }

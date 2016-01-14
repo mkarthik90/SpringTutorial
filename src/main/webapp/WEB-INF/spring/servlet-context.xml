@@ -30,9 +30,9 @@ http://www.springframework.org/schema/context/spring-context.xsd">
 			</list>
 		</property>
 		<property name="mappings">
-			<value>
-				/rest/*=searchController
-			</value>
+			<props>
+			<prop key="**/*">twitterAPIController</prop>
+			</props>
 		</property>
 	</bean>
 
