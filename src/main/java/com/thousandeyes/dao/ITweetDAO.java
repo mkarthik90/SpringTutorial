@@ -4,8 +4,7 @@ import java.util.List;
 
 import com.thousandeyes.bean.User;
 
-public interface ITweetJDBCTemplate {
-
+public interface ITweetDAO {
 	public void followUser(String user, String follower);
 	public void unFollowUser(String user, String unFollow);
 	public List<User> listOfFollowersForUser(String user);

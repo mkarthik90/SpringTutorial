@@ -6,39 +6,39 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.thousandeyes.bean.User;
-import com.thousandeyes.dao.ITweetJDBCTemplate;
+import com.thousandeyes.dao.ITweetDAO;
 
 @Service
 public class SearchService implements ISearchService {
 
 	@Autowired
-	private ITweetJDBCTemplate tweetjdbcTemplate;
+	private ITweetDAO tweetDAO;
 
 	public void followUser(String user, String follower) {
-		tweetjdbcTemplate.followUser(user, follower);
+		tweetDAO.followUser(user, follower);
 	}
 
 	@Override
 	public void unFollowUser(String user, String unfollow) {
-		tweetjdbcTemplate.unFollowUser(user, unfollow);
+		tweetDAO.unFollowUser(user, unfollow);
 	}
 
 	public List<User> listOfFollowersForUser(String user) {
-		return tweetjdbcTemplate.listOfFollowersForUser(user);
+		return tweetDAO.listOfFollowersForUser(user);
 	}
 
 	@Override
 	public List<User> fetchListOfUserFollowedBy(String user) {
-		return tweetjdbcTemplate.fetchListOfUserFollowedBy(user);
+		return tweetDAO.fetchListOfUserFollowedBy(user);
 	}
 
 	@Override
 	public List<User> fetchTweets(String user) {
-		return tweetjdbcTemplate.fetchTweets(user);
+		return tweetDAO.fetchTweets(user);
 	}
 
 	@Override
 	public List<User> fetchTweetsBySearch(String user, String search) {
-		return tweetjdbcTemplate.fetchTweetsSearch(user,search);
+		return tweetDAO.fetchTweetsSearch(user,search);
 	}
 }

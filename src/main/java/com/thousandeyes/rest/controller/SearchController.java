@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.thousandeyes.bean.User;
 import com.thousandeyes.rest.service.ISearchService;
 
-@Controller
+@Controller("searchController")
 public class SearchController {
 
 	@Autowired
@@ -99,10 +99,10 @@ public class SearchController {
 
 		return new ResponseEntity<String>(jsonString.toString(), HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(value = "rest/fetchTweets", method = RequestMethod.GET)
 	public ResponseEntity<String> fetchTweets(@RequestParam("user") String user) {
-		
+
 		List<User> userList = searchService.fetchTweets(user);
 		StringBuilder jsonString = new StringBuilder("{");
 		if (userList.isEmpty()) {
@@ -122,13 +122,13 @@ public class SearchController {
 			jsonString.append("\"");
 			jsonString.append(userObject.getTweetMessage());
 			jsonString.append("\"");
-			
+
 			jsonString.append(",");
 			jsonString.append("\"Tweeted By\":");
 			jsonString.append("\"");
 			jsonString.append(userObject.getTweetdBy());
 			jsonString.append("\"");
-			
+
 			jsonString.append("}");
 			followerNumber++;
 		}
@@ -137,11 +137,12 @@ public class SearchController {
 
 		return new ResponseEntity<String>(jsonString.toString(), HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(value = "rest/fetchTweetsWithSearch", method = RequestMethod.GET)
-	public ResponseEntity<String> fetchTweetsWithSearchValue(@RequestParam("user") String user,@RequestParam("search")String search) {
-		
-		List<User> userList = searchService.fetchTweetsBySearch(user,search);
+	public ResponseEntity<String> fetchTweetsWithSearchValue(@RequestParam("user") String user,
+			@RequestParam("search") String search) {
+
+		List<User> userList = searchService.fetchTweetsBySearch(user, search);
 		StringBuilder jsonString = new StringBuilder("{");
 		if (userList.isEmpty()) {
 			jsonString.append("\"message\": \"Does not have any tweet message\"");
@@ -160,13 +161,13 @@ public class SearchController {
 			jsonString.append("\"");
 			jsonString.append(userObject.getTweetMessage());
 			jsonString.append("\"");
-			
+
 			jsonString.append(",");
 			jsonString.append("\"Tweeted By\":");
 			jsonString.append("\"");
 			jsonString.append(userObject.getTweetdBy());
 			jsonString.append("\"");
-			
+
 			jsonString.append("}");
 			followerNumber++;
 		}
@@ -175,6 +176,5 @@ public class SearchController {
 
 		return new ResponseEntity<String>(jsonString.toString(), HttpStatus.OK);
 	}
-	
-	
+
 }

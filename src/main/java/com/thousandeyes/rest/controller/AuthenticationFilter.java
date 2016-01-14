@@ -11,8 +11,16 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+
+import com.thousandeyes.rest.service.IKeyService;
+
 public class AuthenticationFilter implements Filter {
 
+	
+	private IKeyService keyService;
+	
 	@Override
 	public void destroy() {
 		// TODO Auto-generated method stub
@@ -28,13 +36,11 @@ public class AuthenticationFilter implements Filter {
 			HttpServletRequest httpServletRequest = (HttpServletRequest) request;
 			String authCredentials = request.getParameter("api_key");
 
-			// better injected
-			//AuthenticationService authenticationService = new AuthenticationService();
-
 			/*boolean authenticationStatus = authenticationService
 					.authenticate(authCredentials);
 */
 			
+			keyService.checkAPIKeys(authCredentials);
 			boolean authenticationStatus = false;
 			if (authenticationStatus) {
 				filter.doFilter(request, response);
@@ -50,9 +56,11 @@ public class AuthenticationFilter implements Filter {
 	}
 
 	@Override
-	public void init(FilterConfig arg0) throws ServletException {
-		// TODO Auto-generated method stub
-		
+	public void init(FilterConfig config) throws ServletException {
+		WebApplicationContext springContext = 
+		        WebApplicationContextUtils.getWebApplicationContext(config.getServletContext());
+		keyService = (IKeyService) springContext.getBean("keyService");
+		System.out.println("Hii");
 	}
 
 }
