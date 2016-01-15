@@ -206,7 +206,7 @@ public class TwitterAPIController {
 		return new ResponseEntity<String>(jsonString.toString(), HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "rest/fetchTweetsWithSearch", method = RequestMethod.GET)
+	@RequestMapping(value = "rest/insertTweetMessage", method = RequestMethod.GET)
 	public ResponseEntity<String> insertTweetMessages(@RequestParam("user") String user,
 			@RequestParam("message") String message) {
 		searchService.insertTweetMessages(user, message);
@@ -223,6 +223,7 @@ public class TwitterAPIController {
 	@RequestMapping(value = "restKey/generateApiKey", method = RequestMethod.GET)
 	public ResponseEntity<String> generateApiKey(@RequestParam("user") String userName) {
 
+		//If user does not exists do not generate API KEY
 		if (!keyService.checkUserExists(userName)) {
 			StringBuilder builder = new StringBuilder("{");
 			builder.append("\"ERROR MESSAGE\":");
@@ -246,6 +247,31 @@ public class TwitterAPIController {
 		builder.append("\"apiKey\":");
 		builder.append("\"");
 		builder.append(apiKey.toString());
+		builder.append("\"");
+		builder.append("}");
+
+		return new ResponseEntity<String>(builder.toString(), HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "restKey/createUser", method = RequestMethod.GET)
+	public ResponseEntity<String> createUser(@RequestParam("user") String userName,
+			@RequestParam("password") String password) {
+
+		if (keyService.checkUserExists(userName)) {
+			StringBuilder builder = new StringBuilder("{");
+			builder.append("\"ERROR MESSAGE\":");
+			builder.append("\"");
+			builder.append("USER ALREADY EXISTS");
+			builder.append("\"");
+			builder.append("}");
+
+			return new ResponseEntity<String>(builder.toString(), HttpStatus.OK);
+		}
+		keyService.insertUserNamePassword(userName, password);
+		StringBuilder builder = new StringBuilder("{");
+		builder.append("\"Message\":");
+		builder.append("\"");
+		builder.append("User Successfully Created");
 		builder.append("\"");
 		builder.append("}");
 

@@ -27,7 +27,8 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
 		String apiKey = request.getParameter("apiKey");
 		String user = request.getParameter("user");
 
-		if (request.getRequestURL().toString().contains("/restKey/generateApiKey")) {
+		if (request.getRequestURL().toString().contains("/restKey/generateApiKey")
+				|| request.getRequestURL().toString().contains("restKey/createUser")) {
 			return true;
 		}
 		if (apiKey == null || user == null) {

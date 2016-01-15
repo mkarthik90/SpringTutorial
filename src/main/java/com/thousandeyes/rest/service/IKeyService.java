@@ -7,5 +7,5 @@ public interface IKeyService {
 	
 	public boolean checkUserExists(String user);
 	
-	public void checkAPIKeys(String key);
+	public void insertUserNamePassword(String userName,String password);
 }

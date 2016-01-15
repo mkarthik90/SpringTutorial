@@ -24,4 +24,10 @@ public class KeyDAO implements IKeyDAO {
 		return size;
 	}
 
+	@Override
+	public void insertUserNamePassword(String userName, String password) {
+		String sql = "INSERT INTO USERDETAILS (USERNAME,PASSWORD) VALUES (?,?)";
+		thousandeyesTemplate.getJdbcTemplateObject().update(sql,userName,password);
+	}
+
 }
