@@ -4,9 +4,9 @@ import java.util.List;
 
 public interface IKeyDAO {
 
-	public void insertApiKey(String user,String apiKey);
-	
+	public void insertApiKey(String user, String apiKey);
+
 	public List checkUserExists(String user);
-	
-	public void insertUserNamePassword(String userName,String password);
+
+	public void insertUserNamePassword(String userName, String password);
 }

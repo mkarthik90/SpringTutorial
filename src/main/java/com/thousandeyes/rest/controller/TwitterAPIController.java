@@ -223,7 +223,7 @@ public class TwitterAPIController {
 	@RequestMapping(value = "restKey/generateApiKey", method = RequestMethod.GET)
 	public ResponseEntity<String> generateApiKey(@RequestParam("user") String userName) {
 
-		//If user does not exists do not generate API KEY
+		// If user does not exists do not generate API KEY
 		if (!keyService.checkUserExists(userName)) {
 			StringBuilder builder = new StringBuilder("{");
 			builder.append("\"ERROR MESSAGE\":");
@@ -235,12 +235,16 @@ public class TwitterAPIController {
 			return new ResponseEntity<String>(builder.toString(), HttpStatus.OK);
 		}
 
+		String characters = "abcdefghijklmnopqrstuvwxyz1234567890";
 		SecureRandom random = new SecureRandom();
-		byte bytes[] = new byte[10];
-		random.nextBytes(bytes);
-		random.nextBytes(bytes);
 
-		String apiKey = DatatypeConverter.printBase64Binary(bytes);
+		StringBuilder build = new StringBuilder();
+		for (int i = 0; i < 16; ++i) {
+			int k = random.nextInt(characters.length());
+			build.append(characters.charAt(k));
+		}
+
+		String apiKey = build.toString();
 		keyService.insertAPIKey(userName, apiKey);
 
 		StringBuilder builder = new StringBuilder("{");

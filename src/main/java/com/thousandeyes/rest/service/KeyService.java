@@ -21,9 +21,9 @@ public class KeyService implements IKeyService {
 
 	@Override
 	public boolean checkUserExists(String user) {
-		//Returns true if user exists
+		// Returns true if user exists
 		List userList = keyDAO.checkUserExists(user);
-		if(userList!=null && !userList.isEmpty()){
+		if (userList != null && !userList.isEmpty()) {
 			return true;
 		}
 		return false;
@@ -31,7 +31,7 @@ public class KeyService implements IKeyService {
 
 	@Override
 	public void insertUserNamePassword(String userName, String password) {
-		keyDAO.insertUserNamePassword(userName,password);
-		
+		keyDAO.insertUserNamePassword(userName, password);
+
 	}
 }

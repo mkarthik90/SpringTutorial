@@ -20,14 +20,14 @@ public class KeyDAO implements IKeyDAO {
 	@Override
 	public List checkUserExists(String user) {
 		String sql = "SELECT USERNAME FROM USERDETAILS WHERE USERNAME =?";
-		List size = thousandeyesTemplate.getJdbcTemplateObject().queryForList(sql,user);
+		List size = thousandeyesTemplate.getJdbcTemplateObject().queryForList(sql, user);
 		return size;
 	}
 
 	@Override
 	public void insertUserNamePassword(String userName, String password) {
 		String sql = "INSERT INTO USERDETAILS (USERNAME,PASSWORD) VALUES (?,?)";
-		thousandeyesTemplate.getJdbcTemplateObject().update(sql,userName,password);
+		thousandeyesTemplate.getJdbcTemplateObject().update(sql, userName, password);
 	}
 
 }
