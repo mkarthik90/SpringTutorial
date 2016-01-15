@@ -24,17 +24,18 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 
-		String apiKey = request.getParameter("api_key");
-		
-		if(request.getRequestURL().toString().contains("/restKey/generateApiKey")){
+		String apiKey = request.getParameter("apiKey");
+		String user = request.getParameter("user");
+
+		if (request.getRequestURL().toString().contains("/restKey/generateApiKey")) {
 			return true;
 		}
-		if(apiKey==null){
+		if (apiKey == null || user == null) {
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			return false;
 		}
-		String sql = "SELECT * FROM USERDETAILS WHERE APIKEY=?";
-		List key = jdbcTemplate.getJdbcTemplateObject().queryForList(sql, apiKey);
+		String sql = "SELECT * FROM USERDETAILS WHERE APIKEY=? AND USERNAME=?";
+		List key = jdbcTemplate.getJdbcTemplateObject().queryForList(sql, apiKey, user);
 		if (key == null || key.isEmpty()) {
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			return false;

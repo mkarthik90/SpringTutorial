@@ -14,12 +14,12 @@ public class SearchService implements ISearchService {
 	@Autowired
 	private ITweetDAO tweetDAO;
 
-	public void followUser(String user, String follower) {
+	public void followUser(String user, String follower)throws Exception {
 		tweetDAO.followUser(user, follower);
 	}
 
 	@Override
-	public void unFollowUser(String user, String unfollow) {
+	public void unFollowUser(String user, String unfollow)throws Exception {
 		tweetDAO.unFollowUser(user, unfollow);
 	}
 
@@ -40,5 +40,11 @@ public class SearchService implements ISearchService {
 	@Override
 	public List<User> fetchTweetsBySearch(String user, String search) {
 		return tweetDAO.fetchTweetsSearch(user,search);
+	}
+
+	@Override
+	public void insertTweetMessages(String user, String message) {
+		tweetDAO.insertTweetMessages(user,message);
+		
 	}
 }

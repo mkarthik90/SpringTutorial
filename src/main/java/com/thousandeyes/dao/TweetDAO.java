@@ -19,10 +19,13 @@ public class TweetDAO implements ITweetDAO {
 	private TweetJDBCTemplate thousandEyestemplate;
 
 	@Override
-	public void unFollowUser(String user, String unFollow) {
+	public void unFollowUser(String user, String unFollow) throws Exception {
 
 		String sql = "DELETE FROM FOLLOWTABLE WHERE USER=? AND FOLLOWS=?";
 		int numberOfRecordsDeleted = thousandEyestemplate.getJdbcTemplateObject().update(sql, user, unFollow);
+		if (numberOfRecordsDeleted == 0) {
+			throw new Exception("Please first follow the user to unfollow");
+		}
 	}
 
 	@Override
@@ -104,7 +107,15 @@ public class TweetDAO implements ITweetDAO {
 
 	}
 
-	public void followUser(String user, String follower) {
+	public void followUser(String user, String follower) throws Exception {
+
+		// Check if the user is already following
+
+		String sqlCondition = "SELECT * FROM FOLLOWTABLE WHERE USER=? AND FOLLOWS=?";
+		List conditionList = thousandEyestemplate.getJdbcTemplateObject().queryForList(sqlCondition, user, follower);
+		if (conditionList != null && !conditionList.isEmpty()) {
+			throw new Exception("User Already Following");
+		}
 		String sql = "INSERT INTO FOLLOWTABLE (USER,FOLLOWS) VALUES (?,?)";
 		thousandEyestemplate.getJdbcTemplateObject().update(sql, user, follower);
 	}
@@ -117,6 +128,12 @@ public class TweetDAO implements ITweetDAO {
 			tweetDetails.setTweetdBy(map.get("TWEETEDBY"));
 			tweetList.add(tweetDetails);
 		}
+	}
+
+	@Override
+	public void insertTweetMessages(String user, String message) {
+		String sql = "INSERT INTO TWEETS (TWEETEDBY,MESSAGE) VALUES (?,?)";
+		thousandEyestemplate.getJdbcTemplateObject().update(sql, user, message);
 	}
 
 }

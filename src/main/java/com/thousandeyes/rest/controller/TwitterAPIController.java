@@ -2,8 +2,6 @@ package com.thousandeyes.rest.controller;
 
 import java.security.Principal;
 import java.security.SecureRandom;
-import java.sql.Timestamp;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -33,18 +31,40 @@ public class TwitterAPIController {
 	@RequestMapping(value = "rest/followUser", method = RequestMethod.GET)
 	public ResponseEntity<String> followUser(@RequestParam("user") String user, @RequestParam("follows") String follows,
 			Principal principal) {
-
-		searchService.followUser(user, follows);
-		System.out.println(user);
-		return null;
+		StringBuilder builder = new StringBuilder();
+		builder.append("{");
+		builder.append("\"Message\"");
+		builder.append(":");
+		try {
+			searchService.followUser(user, follows);
+		} catch (Exception ex) {
+			builder.append("\"" + ex.getMessage() + "\"");
+			builder.append("}");
+			return new ResponseEntity<String>(builder.toString(), HttpStatus.OK);
+		}
+		builder.append("Following Successfully");
+		builder.append("}");
+		return new ResponseEntity<String>(builder.toString(), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "rest/unFollow", method = RequestMethod.GET)
 	public ResponseEntity<String> unfollowUser(@RequestParam("user") String user,
 			@RequestParam("unfollow") String unfollow, Principal principal) {
-
-		searchService.unFollowUser(user, unfollow);
-		return null;
+		StringBuilder builder = new StringBuilder("{");
+		try {
+			builder.append("\"Message\"");
+			builder.append(":");
+			searchService.unFollowUser(user, unfollow);
+		} catch (Exception ex) {
+			builder.append("\"");
+			builder.append(ex.getMessage());
+			builder.append("\"");
+			builder.append("}");
+			return new ResponseEntity<String>(builder.toString(), HttpStatus.OK);
+		}
+		builder.append("\"Unfollowed Successfully\"");
+		builder.append("}");
+		return new ResponseEntity<String>(builder.toString(), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "rest/listOfFollowersForUser", method = RequestMethod.GET)
@@ -184,6 +204,20 @@ public class TwitterAPIController {
 		jsonString.append("}");
 
 		return new ResponseEntity<String>(jsonString.toString(), HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "rest/fetchTweetsWithSearch", method = RequestMethod.GET)
+	public ResponseEntity<String> insertTweetMessages(@RequestParam("user") String user,
+			@RequestParam("message") String message) {
+		searchService.insertTweetMessages(user, message);
+		StringBuilder builder = new StringBuilder("{");
+		builder.append("\"Message\"");
+		builder.append(":");
+		builder.append("\"");
+		builder.append("\"INSERTED TWEET MESSAGE SUCCESSFULLY\"");
+		builder.append("\"");
+		builder.append("}");
+		return new ResponseEntity<String>(builder.toString(), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "restKey/generateApiKey", method = RequestMethod.GET)

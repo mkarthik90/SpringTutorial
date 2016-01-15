@@ -6,9 +6,9 @@ import com.thousandeyes.bean.User;
 
 public interface ISearchService {
 
-	public void followUser(String user, String follower);
+	public void followUser(String user, String follower)throws Exception;
 	
-	public void unFollowUser(String user, String unfollow);
+	public void unFollowUser(String user, String unfollow)throws Exception;
 	
 	public List<User> listOfFollowersForUser(String user);
 	
@@ -17,5 +17,7 @@ public interface ISearchService {
 	public List<User> fetchTweets(String user);
 	
 	public List<User> fetchTweetsBySearch(String user,String search);
+	
+	public void insertTweetMessages(String user,String message);
 	
 }
